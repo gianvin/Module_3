@@ -19,8 +19,8 @@
 # Useful Websites
 
 {Make a list of websites that you found helpful in this project}
-* [Web Site Name](http://url.link.goes.here)
-* [Web Site Name](http://url.link.goes.here)
+* [The Python Arcade Library](https://api.arcade.academy/en/stable/)
+* [DEV Create your First Python Game](https://dev.to/lovelacecoding/how-to-build-your-first-python-game-a-step-by-step-guide-to-creating-a-simple-shooter-with-pygame-f0k)
 
 # Future Work
 
