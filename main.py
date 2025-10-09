@@ -36,6 +36,16 @@ class Player:
 player1 = Player("Player 1")
 player2 = Player("Player 2")
 
+# Function for class Card
+class Card:
+    def __init__(self, image, name, x, y, back_image):
+        self.image = image
+        self.name = name
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.flipped = False
+        self.matched = False
+        self.back_image = back_image
+                                                                      
 # Start with Player 1
 current_player = player1
 
