@@ -37,6 +37,7 @@ class Player:
 # Create 2 players
 player1 = Player("Player 1")
 player2 = Player("Player 2")
+current_player = player1
 
 # Function for class Card
 class Card:
@@ -90,6 +91,35 @@ current_player = player1
 
 #Set the Frame Rate
 clock = pygame.time.Clock()
+
+
+# Step 5 Add Flip and Match
+flipped_cards = []
+
+def handle_click(pos):
+    global current_player
+    for card in cards:
+        if card.rect.collidepoint(pos) and not card.flipped and not card.matched:
+            card.flipped = True
+            flipped_cards.append(card)
+            break
+
+        if len(flipped_cards) == 2:
+            card1, card2 = flipped_cards
+            if card1.name == card2.name:
+                #Matched!
+                card1.matched = True
+                card2.matched = True
+            else:
+
+                #Not Matched flipped back after delay
+                pygame.time.delay(800)
+                card1.flipped = False
+                card2.flipped = False
+                flipped_cards.clear()
+
+                #switch turn
+                current_player = player2 if current_player == player1 else player1
 
 #Main game loop
 running = True
