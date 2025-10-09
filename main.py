@@ -18,14 +18,14 @@ font = pygame.font.Font(None, 36)
 def load_image(path):
     return pygame.transform.scale(pygame.image.load(path, (100,100)))
 #Animal images
-dog = load_image("Images/dog.png")
-elephant = load_image("Images/elephant.png")
-frog = load_image("Images/frog.png")
-jellyfish = load_image("Images/jellyfish.png")
-kangaroo = load_image("Images/bear.png")
-lion = load_image("Images/lion.png")
-turtle = load_image("Images/turtle.png")
-back = load_image("Images/back.png")
+dog = load_image("images/dog.png")
+elephant = load_image("images/elephant.png")
+frog = load_image("images/frog.png")
+jellyfish = load_image("images/jellyfish.png")
+kangaroo = load_image("images/bear.png")
+lion = load_image("images/lion.png")
+turtle = load_image("images/turtle.png")
+back = load_image("images/back.png")
 # Player Class
 class Player:
     def __init__(self, name):
