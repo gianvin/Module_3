@@ -2,8 +2,12 @@ import pygame
 import sys
 import random
 
-# Step 1 Initialize Pygame
+# Initialize Pygame
 pygame.init()
+
+# Load Sound
+flip_sound = pygame.mixer.Sound("sounds/flip.ogg")
+
 
 # Set up the game window
 screen_width = 800
@@ -113,6 +117,7 @@ def handle_click(pos):
         if card.rect.collidepoint(pos) and not card.flipped and not card.matched:
             card.flipped = True
             flipped_cards.append(card)
+            flip_sound.play()
             break
 
 def check_match():
