@@ -6,7 +6,7 @@ import random
 pygame.init()
 
 # Load Sound
-flip_sound = pygame.mixer.Sound("sounds/flip.ogg")
+win_sound = pygame.mixer.Sound("sounds/clap.wav")
 
 
 # Set up the game window
@@ -117,7 +117,6 @@ def handle_click(pos):
         if card.rect.collidepoint(pos) and not card.flipped and not card.matched:
             card.flipped = True
             flipped_cards.append(card)
-            flip_sound.play()
             break
 
 def check_match():
@@ -164,6 +163,10 @@ while running:
     if awaiting_flip and pygame.time.get_ticks() >= flip_time:
         flip_back_and_switch()
     
+    if all(card.matched for card in cards):
+        win_sound.play()
+        pygame.time.wait(3000)
+        running
     #Fill the screen with a color white
     screen.fill((255, 255, 255))
 
