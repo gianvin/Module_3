@@ -21,6 +21,7 @@
 {Make a list of websites that you found helpful in this project}
 * [The Python Arcade Library](https://api.arcade.academy/en/stable/)
 * [DEV Create your First Python Game](https://dev.to/lovelacecoding/how-to-build-your-first-python-game-a-step-by-step-guide-to-creating-a-simple-shooter-with-pygame-f0k)
+* [Animal Icon](https://www.flaticon.com/search?word=Animals)
 
 # Future Work
 
