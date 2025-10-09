@@ -53,6 +53,38 @@ class Card:
             surface.blit(self.image, self.rect)
         else:
             surface.blit(self.back_image, self.rect)                                                                 
+# Create card pairs
+animals = [
+    ("Dog", dog),
+    ("Elephant", elephant),
+    ("frog", frog),
+    ("Jellyfish", jellyfish),
+    ("Kangaroo", kangaroo),
+    ("Bear", bear),
+    ("Lion", lion),
+    ("turtle", turtle)
+]
+
+# For Pairing
+all_cards = []
+for name, img in animals:
+    all_cards.append((name, img))
+    all_cards.append((name, img))
+
+# Shuffle the cards randomly
+random.shuffle(all_cards)
+
+# Card positions
+cards = []
+start_x, start_y = 100, 150
+gap = 20
+cols = 4
+
+for i, (name, img) in enumerate(all_cards):
+    x = start_x + (i % cols) * (100 + gap)
+    y = start_y + (i // cols) * (100 + gap)
+    cards.append(Card(img, name, x, y, back))
+
 # Start with Player 1
 current_player = player1
 
@@ -70,9 +102,12 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             current_player = player2 if current_player == player1 else player1
     
-    #Fill the screen with a color 
+    #Fill the screen with a color white
     screen.fill((255, 255, 255))
 
+    # Drawing all cards
+    for card in cards:
+        card.draw(screen)
     #Display the scores of the players
     text1 = font.render(f"{player1.name}: {player1.score}", True, (0, 0, 0))
     text2 = font.render(f"{player2.name}: {player2.score}", True, (0, 0, 0))
