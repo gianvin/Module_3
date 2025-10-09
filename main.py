@@ -14,6 +14,15 @@ pygame.display.set_caption("Animal Kingdom")
 # Font setup
 font = pygame.font.Font(None, 36)
 
+# Load and resize images
+def load_image(path):
+    return pygame.transform.scale(pygame.image.load(path, (100,100)))
+#Animal images
+dog = load_image("images/dog.png")
+elephant = load_image("images/elephant.png")
+frog = load_image("images/frog.png")
+jellyfish = load_image("images/jellyfish.png")
+kangaroo = load_image("images/koala.png")
 # Player Class
 class Player:
     def __init__(self, name):
