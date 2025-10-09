@@ -175,6 +175,17 @@ while running:
     screen.blit(text2, (10, 40))
     screen.blit(turn_text, (10, 70))
     
+    #Function to check all cards matched, and which player win
+
+    if all(card.matched for card in cards):
+        if player1.score > player2.score:
+            winner_text = f"{player1.name} Wins!"
+        elif player2.score > player1.score:
+            winner_text = f"{player2.name} Wins!"
+        else: winner_text = "It's a Tie"
+
+        winner_display = font.render(winner_text, True, (0, 128, 0))
+        screen.blit(winner_display, (300, 500))
     # Update the display
     pygame.display.flip()
 
