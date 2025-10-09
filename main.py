@@ -2,7 +2,7 @@ import pygame
 import sys
 import random
 
-#Initialize Pygame
+# Step 1 Initialize Pygame
 pygame.init()
 
 # Set up the game window
@@ -95,14 +95,21 @@ clock = pygame.time.Clock()
 
 # Step 5 Add Flip and Match
 flipped_cards = []
+flip_time = 0 # timer to handle unmatched card delay
 
 def handle_click(pos):
-    global current_player
-    for card in cards:
+   # Only allow clicks if we're not writing to flip back
+   if pygame.time.get_ticks() < flip_time:
+      return
+   
+   for card in cards:
         if card.rect.collidepoint(pos) and not card.flipped and not card.matched:
             card.flipped = True
             flipped_cards.append(card)
             break
+
+def check_match():
+        global flipped_cards, current_player, flip_time
 
         if len(flipped_cards) == 2:
             card1, card2 = flipped_cards
@@ -110,16 +117,13 @@ def handle_click(pos):
                 #Matched!
                 card1.matched = True
                 card2.matched = True
+                current_player.score += 1
+                flipped_cards = []
             else:
 
-                #Not Matched flipped back after delay
-                pygame.time.delay(800)
-                card1.flipped = False
-                card2.flipped = False
-                flipped_cards.clear()
+                # wait 1 second before flipping back
+                flip_time = pygame.time.get_ticks() + 1000
 
-                #switch turn
-                current_player = player2 if current_player == player1 else player1
 
 #Main game loop
 running = True
@@ -128,9 +132,22 @@ while running:
         if event.type == pygame.QUIT:
            running = False
 
-        # Switch Turn when mouse is clicked 
+
         if event.type == pygame.MOUSEBUTTONDOWN:
-            current_player = player2 if current_player == player1 else player1
+            pos = pygame.mouse.get_pos()
+            handle_click(pos)
+        
+        if flip_time != 0 and pygame.time.get_ticks() >= flip_time:
+            for card in flipped_cards:
+                card.flipped = False
+                flipped_cards = []
+                flip_time = 0
+
+                # switch player turn
+                current_player = player2 if current_player == player1 else player1
+
+                # check matches
+                check_match()
     
     #Fill the screen with a color white
     screen.fill((255, 255, 255))
