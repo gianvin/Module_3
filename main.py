@@ -22,7 +22,9 @@ dog = load_image("images/dog.png")
 elephant = load_image("images/elephant.png")
 frog = load_image("images/frog.png")
 jellyfish = load_image("images/jellyfish.png")
-kangaroo = load_image("images/koala.png")
+kangaroo = load_image("images/bear.png")
+lion = load_image("images/lion.png")
+turtle = load_image("images/turtle.png")
 # Player Class
 class Player:
     def __init__(self, name):
@@ -50,7 +52,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             current_player = player2 if current_player == player1 else player1
     
-    #Fill the screen with a color (black in this case)
+    #Fill the screen with a color 
     screen.fill((255, 255, 255))
 
     #Display the scores of the players
