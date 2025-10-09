@@ -137,6 +137,10 @@ while running:
             pos = pygame.mouse.get_pos()
             handle_click(pos)
         
+        check_match()
+
+        # Flipping cards back after 1 second
+        
         if flip_time != 0 and pygame.time.get_ticks() >= flip_time:
             for card in flipped_cards:
                 card.flipped = False
@@ -145,9 +149,6 @@ while running:
 
                 # switch player turn
                 current_player = player2 if current_player == player1 else player1
-
-                # check matches
-                check_match()
     
     #Fill the screen with a color white
     screen.fill((255, 255, 255))
