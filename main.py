@@ -16,13 +16,14 @@ font = pygame.font.Font(None, 36)
 
 # Load and resize images
 def load_image(path):
-    return pygame.transform.scale(pygame.image.load(path, (100,100)))
+    return pygame.transform.scale(pygame.image.load(path), (100,100))
 #Animal images
+bear = load_image("images/bear.png")
 dog = load_image("images/dog.png")
 elephant = load_image("images/elephant.png")
 frog = load_image("images/frog.png")
 jellyfish = load_image("images/jellyfish.png")
-kangaroo = load_image("images/bear.png")
+kangaroo = load_image("images/kangaroo.png")
 lion = load_image("images/lion.png")
 turtle = load_image("images/turtle.png")
 back = load_image("images/back.png")
@@ -45,7 +46,12 @@ class Card:
         self.flipped = False
         self.matched = False
         self.back_image = back_image
-                                                                      
+    
+    def draw(self, surface):
+        if self.flipped or self.matched:
+            surface.blit(self.image, self.rect)
+        else:
+            surface.blit(self.back_image, self.rect)                                                                 
 # Start with Player 1
 current_player = player1
 
