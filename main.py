@@ -185,7 +185,7 @@ while running:
         else: winner_text = "It's a Tie"
 
         winner_display = font.render(winner_text, True, (0, 128, 0))
-        screen.blit(winner_display, (300, 500))
+        screen.blit(winner_display, (300, 50))
     # Update the display
     pygame.display.flip()
 
