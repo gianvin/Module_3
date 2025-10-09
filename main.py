@@ -11,13 +11,21 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Animal Kingdom")
 
-
 # Font setup
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font(None, 24)
 
 # Load and resize images
 def load_image(path):
-    return pygame.transform.scale(pygame.image.load(path), (100,100))
+    try:
+        img = pygame.image.load(path)
+        return pygame.transform.scale(img, (100,100))
+    except Exception as e:
+        print(f"Warning: couldn't load '{path}': {e} - using placeholder")
+        surf = pygame.Surface((100, 100))
+        surf.fill((200, 200, 200))
+        label = font.render(path.split('/')[-1].split('.')[0], True, (0, 0, 0))
+        surf.blit(label, label.get_rect(center=(50,50)))
+        return surf
 #Animal images
 bear = load_image("images/bear.png")
 dog = load_image("images/dog.png")
@@ -44,7 +52,7 @@ class Card:
     def __init__(self, image, name, x, y, back_image):
         self.image = image
         self.name = name
-        self.rect = self.image.get_rect(topleft=(x, y))
+        self.rect = pygame.Rect(x, y, 100, 100)
         self.flipped = False
         self.matched = False
         self.back_image = back_image
@@ -77,7 +85,7 @@ random.shuffle(all_cards)
 
 # Card positions
 cards = []
-start_x, start_y = 100, 150
+start_x, start_y = 100, 120
 gap = 20
 cols = 4
 
@@ -86,21 +94,20 @@ for i, (name, img) in enumerate(all_cards):
     y = start_y + (i // cols) * (100 + gap)
     cards.append(Card(img, name, x, y, back))
 
-# Start with Player 1
-current_player = player1
-
-#Set the Frame Rate
+# Game variables
 clock = pygame.time.Clock()
-
-
-# Step 5 Add Flip and Match
 flipped_cards = []
-flip_time = 0 # timer to handle unmatched card delay
+flip_time = 0
+awaiting_flip = False
 
 def handle_click(pos):
-   # Only allow clicks if we're not writing to flip back
-   if pygame.time.get_ticks() < flip_time:
-      return
+   # ignore clicks while waiting for flip-back to complete
+   if awaiting_flip:
+       return
+   #prevent clicking more than 2 cards
+   if len(flipped_cards) >= 2:
+       return
+
    
    for card in cards:
         if card.rect.collidepoint(pos) and not card.flipped and not card.matched:
@@ -109,21 +116,33 @@ def handle_click(pos):
             break
 
 def check_match():
-        global flipped_cards, current_player, flip_time
+        global flip_time, awaiting_flip, flipped_cards, current_player 
 
-        if len(flipped_cards) == 2:
-            card1, card2 = flipped_cards
-            if card1.name == card2.name:
+        if len(flipped_cards) == 2 and not awaiting_flip:
+            c1, c2 = flipped_cards
+            if c1.name.lower() == c2.name.lower():
                 #Matched!
-                card1.matched = True
-                card2.matched = True
+                c1.matched = True
+                c2.matched = True
                 current_player.score += 1
-                flipped_cards = []
+                flipped_cards.clear() 
             else:
 
                 # wait 1 second before flipping back
+                awaiting_flip = True
                 flip_time = pygame.time.get_ticks() + 1000
 
+#Function for Flip back and switch
+def flip_back_and_switch():
+    global flip_time, awaiting_flip, flipped_cards, current_player
+    
+    #flip back the two cards and switch turn
+    for c in flipped_cards:
+        c.flipped = False
+    flipped_cards.clear()
+    awaiting_flip = False
+    flip_time = 0
+    current_player = player2 if current_player == player1 else player1
 
 #Main game loop
 running = True
@@ -131,24 +150,14 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
            running = False
-
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
-            handle_click(pos)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            handle_click(pygame.mouse.get_pos())
         
-        check_match()
+    check_match()
 
-        # Flipping cards back after 1 second
-        
-        if flip_time != 0 and pygame.time.get_ticks() >= flip_time:
-            for card in flipped_cards:
-                card.flipped = False
-                flipped_cards = []
-                flip_time = 0
-
-                # switch player turn
-                current_player = player2 if current_player == player1 else player1
+     # If waiting and timer expired, flip back and switch players
+    if awaiting_flip and pygame.time.get_ticks() >= flip_time:
+        flip_back_and_switch()
     
     #Fill the screen with a color white
     screen.fill((255, 255, 255))
@@ -156,15 +165,15 @@ while running:
     # Drawing all cards
     for card in cards:
         card.draw(screen)
-    #Display the scores of the players
+    #Displaying the scores of the players
     text1 = font.render(f"{player1.name}: {player1.score}", True, (0, 0, 0))
     text2 = font.render(f"{player2.name}: {player2.score}", True, (0, 0, 0))
-    turn_text = font.render(f"Turn: {current_player.name}", True, (255, 0, 0))
+    turn_text = font.render(f"Turn: {current_player.name}", True, (200, 0, 0))
     
     #Draw text on screen
     screen.blit(text1, (10, 10))
-    screen.blit(text2, (10, 50))
-    screen.blit(turn_text, (10, 100))
+    screen.blit(text2, (10, 40))
+    screen.blit(turn_text, (10, 70))
     
     # Update the display
     pygame.display.flip()
@@ -174,3 +183,5 @@ while running:
 
 pygame.quit()
 sys.exit()
+
+
